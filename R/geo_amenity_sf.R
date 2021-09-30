@@ -163,6 +163,7 @@ geo_amenity_sf_single <- function(bbox,
 
   json <- tempfile(fileext = ".geojson")
 
+  # nocov start
   res <- tryCatch(
     download.file(url, json, mode = "wb", quiet = isFALSE(verbose)),
     warning = function(e) {
@@ -174,9 +175,12 @@ geo_amenity_sf_single <- function(bbox,
   )
 
   if (is.null(res)) {
-    message(url, " not reachable. Returning NULL.")
-    return(NULL)
+    message(url, " not reachable.", call. = FALSE)
+    result_out <- data.frame(query = amenity)
+    return(result_out)
   }
+
+  # nocov end
 
   sfobj <- sf::st_read(json,
     stringsAsFactors = FALSE,
@@ -187,7 +191,7 @@ geo_amenity_sf_single <- function(bbox,
   # Check if null and return
 
   if (length(names(sfobj)) == 1) {
-    warning("No results for query ", amenity, call. = FALSE)
+    message("No results for query ", amenity, call. = FALSE)
     result_out <- data.frame(query = amenity)
     return(result_out)
   }

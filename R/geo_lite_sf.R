@@ -152,6 +152,7 @@ geo_lite_sf_single <- function(address,
 
   json <- tempfile(fileext = ".geojson")
 
+  # nocov start
   res <- tryCatch(
     download.file(url, json, mode = "wb", quiet = isFALSE(verbose)),
     warning = function(e) {
@@ -163,9 +164,12 @@ geo_lite_sf_single <- function(address,
   )
 
   if (is.null(res)) {
-    message(url, " not reachable. Returning NULL.")
-    return(NULL)
+    message(url, " not reachable.")
+    result_out <- data.frame(query = address)
+    return(result_out)
   }
+  # nocov end
+
   sfobj <- sf::st_read(json,
     stringsAsFactors = FALSE,
     quiet = isFALSE(verbose)
@@ -174,7 +178,7 @@ geo_lite_sf_single <- function(address,
   # Check if null and return
 
   if (length(names(sfobj)) == 1) {
-    warning("No results for query ", address, call. = FALSE)
+    message("No results for query ", address, call. = FALSE)
     result_out <- data.frame(query = address)
     return(result_out)
   }

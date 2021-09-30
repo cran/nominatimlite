@@ -24,7 +24,7 @@
 #' @return A `tibble` with the results.
 #'
 #' @family amenity
-#'
+#' @family geocoding
 #' @details
 #'
 #' Bounding boxes can be located using different online tools, as
@@ -61,7 +61,7 @@
 #'   strict = TRUE
 #' )
 #' }
-#' @seealso [nominatimlite::osm_amenities]
+#'
 #' @export
 geo_amenity <- function(bbox,
                         amenity,
@@ -178,6 +178,8 @@ geo_amenity_single <- function(bbox,
 
   json <- tempfile(fileext = ".json")
 
+
+  # nocov start
   res <- tryCatch(
     download.file(url, json, mode = "wb", quiet = isFALSE(verbose)),
     warning = function(e) {
@@ -189,9 +191,13 @@ geo_amenity_single <- function(bbox,
   )
 
   if (is.null(res)) {
-    message(url, " not reachable. Returning NULL.")
-    return(NULL)
+    message(url, " not reachable.", call. = FALSE)
+    result_out <- tibble::tibble(query = amenity, a = NA, b = NA)
+    names(result_out) <- c("query", lat, long)
+    return(result_out)
   }
+  # nocov end
+
   result <- tibble::as_tibble(jsonlite::fromJSON(json, flatten = TRUE))
 
   if (nrow(result) > 0) {
@@ -205,7 +211,7 @@ geo_amenity_single <- function(bbox,
   names(result) <- nmes
 
   if (nrow(result) == 0) {
-    warning("No results for query ", amenity, call. = FALSE)
+    message("No results for query ", amenity, call. = FALSE)
     result_out <- tibble::tibble(query = amenity, a = NA, b = NA)
     names(result_out) <- c("query", lat, long)
     return(result_out)

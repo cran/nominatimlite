@@ -66,6 +66,7 @@ geo_address_lookup <- function(osm_ids,
 
   json <- tempfile(fileext = ".json")
 
+  # nocov start
   res <- tryCatch(
     download.file(url, json, mode = "wb", quiet = isFALSE(verbose)),
     warning = function(e) {
@@ -77,9 +78,12 @@ geo_address_lookup <- function(osm_ids,
   )
 
   if (is.null(res)) {
-    message(url, " not reachable. Returning NULL.")
-    return(NULL)
+    message(url, " not reachable.", nodes, call. = FALSE)
+    result_out <- tibble::tibble(query = paste0(type, osm_ids), a = NA, b = NA)
+    names(result_out) <- c("query", lat, long)
+    return(result_out)
   }
+  # nocov end
 
   result <- tibble::as_tibble(jsonlite::fromJSON(json, flatten = TRUE))
 
@@ -94,7 +98,7 @@ geo_address_lookup <- function(osm_ids,
   names(result) <- nmes
 
   if (nrow(result) == 0) {
-    warning("No results for query ", nodes, call. = FALSE)
+    message("No results for query ", nodes, call. = FALSE)
     result_out <- tibble::tibble(query = paste0(type, osm_ids), a = NA, b = NA)
     names(result_out) <- c("query", lat, long)
     return(result_out)
