@@ -38,7 +38,7 @@
 #'
 #' @return A `sf` object with the results.
 #'
-#' @examples
+#' @examplesIf nominatim_check_access()
 #' \donttest{
 #' library(ggplot2)
 #'
@@ -229,11 +229,11 @@ reverse_geo_lite_sf_single <- function(lat_cap,
 
   # Handle errors
   if (!"sf" %in% class(sfobj)) {
-    message("No results for query lon=",
+    message(
+      "No results for query lon=",
       long_cap,
       ", lat=",
-      lat_cap,
-      call. = FALSE
+      lat_cap
     )
     result_out <- tibble::tibble(ad = NA)
     names(result_out) <- address
