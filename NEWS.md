@@ -1,3 +1,7 @@
+# nominatimlite 0.1.6
+
+-  Improve results when there is no response of the API.
+
 # nominatimlite 0.1.5
 
 -   Avoid de-duplication on results.
