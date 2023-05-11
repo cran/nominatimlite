@@ -16,10 +16,10 @@ instead of \code{bbox}}
 \item{crs}{coordinate reference system, something suitable as input to \link[sf]{st_crs}}
 }
 \value{
-A \code{sf} object
+A \code{sfc} object of class \code{POLYGON}.
 }
 \description{
-Create a \code{sf} polygon object from the coordinates of a bounding box
+Create a \pkg{sf} polygon object from the coordinates of a bounding box
 }
 \details{
 Bounding boxes can be located using different online tools, as
@@ -40,29 +40,32 @@ ggplot(bbox_GER_sf) +
   geom_sf()
 \donttest{
 # Extract the bounding box of a sf object
-Texas <- geo_lite_sf("Texas", points_only = FALSE)
-bbox <- sf::st_bbox(Texas)
+sfobj <- geo_lite_sf("seychelles", points_only = FALSE)
+
+sfobj
+
+bbox <- sf::st_bbox(sfobj)
 
 bbox
 
-bbox_Texas <- bbox_to_poly(bbox)
+bbox_sfobj <- bbox_to_poly(bbox)
 
-ggplot(bbox_Texas) +
-  geom_sf(col = "red") +
-  geom_sf(data = Texas)
+ggplot(bbox_sfobj) +
+  geom_sf(fill = "lightblue", alpha = 0.5) +
+  geom_sf(data = sfobj, fill = "wheat")
 }
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}
 
-Other spatial: 
+Get spatial (`sf`) objects: 
 \code{\link{geo_address_lookup_sf}()},
 \code{\link{geo_amenity_sf}()},
 \code{\link{geo_lite_sf}()},
 \code{\link{reverse_geo_lite_sf}()}
 
-Other amenity: 
+Search amenities: 
 \code{\link{geo_amenity_sf}()},
 \code{\link{geo_amenity}()},
 \code{\link{osm_amenities}}

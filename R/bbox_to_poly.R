@@ -1,6 +1,8 @@
 #' Create a bounding box `sf` object
 #'
-#' Create a `sf` polygon object from the coordinates of a bounding box
+#' @description
+#'
+#' Create a \pkg{sf} polygon object from the coordinates of a bounding box
 #'
 #' @param bbox numeric vector of 4 elements representing the coordinates of the
 #'   bounding box. Values should be `c(xmin, ymin, xmax, ymax)`
@@ -9,7 +11,7 @@
 #'
 #' @inheritParams sf::st_sf
 #'
-#' @return A `sf` object
+#' @return A `sfc` object of class `POLYGON`.
 #'
 #' @seealso [sf::st_as_sfc()]
 #'
@@ -35,16 +37,19 @@
 #'   geom_sf()
 #' \donttest{
 #' # Extract the bounding box of a sf object
-#' Texas <- geo_lite_sf("Texas", points_only = FALSE)
-#' bbox <- sf::st_bbox(Texas)
+#' sfobj <- geo_lite_sf("seychelles", points_only = FALSE)
+#'
+#' sfobj
+#'
+#' bbox <- sf::st_bbox(sfobj)
 #'
 #' bbox
 #'
-#' bbox_Texas <- bbox_to_poly(bbox)
+#' bbox_sfobj <- bbox_to_poly(bbox)
 #'
-#' ggplot(bbox_Texas) +
-#'   geom_sf(col = "red") +
-#'   geom_sf(data = Texas)
+#' ggplot(bbox_sfobj) +
+#'   geom_sf(fill = "lightblue", alpha = 0.5) +
+#'   geom_sf(data = sfobj, fill = "wheat")
 #' }
 #' @export
 
