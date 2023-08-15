@@ -7,7 +7,11 @@ vignette: >
   %\VignetteIndexEntry{Get started with nominatimlite}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+link-citations: true
 ---
+
+<!-- nominatimlite.Rmd is generated from nominatimlite.Rmd.orig. Please edit that file -->
 
 
 
@@ -34,10 +38,10 @@ accessible, so `nominatimlite` uses base functions to overcome this limitation.
 There are other packages much more complete and mature than `nominatimlite`,
 that presents similar features:
 
--   [`tidygeocoder`](https://jessecambon.github.io/tidygeocoder/) by Jesse
-    Cambon. Allows to interface with Nominatim, Google, TomTom, Mapbox, etc. for
-    geocoding and reverse geocoding.
--   [`osmdata`](https://docs.ropensci.org/osmdata/) by Mark Padgham. Great for
+-   [`tidygeocoder`](https://jessecambon.github.io/tidygeocoder/)
+    [@R-tidygeocoder]. Allows to interface with Nominatim, Google, TomTom,
+    Mapbox, etc. for geocoding and reverse geocoding.
+-   [`osmdata`](https://docs.ropensci.org/osmdata/) [@R-osmdata]. Great for
     downloading spatial data from OpenStreetMap, via the [Overpass
     API](https://wiki.openstreetmap.org/wiki/Overpass_API).
 
@@ -67,7 +71,7 @@ ggplot(CA) +
   geom_sf(data = pizzahut, col = "red")
 ```
 
-![plot of chunk pizzahut](./pizzahut-1.png)
+![Pizza Hut in California](../man/figures/README-pizzahut-1.png){width="100%"}
 
 You can also extract polygon and line objects (if available) using the option
 `points_only = FALSE`:
@@ -80,8 +84,8 @@ ggplot(sol_poly) +
   geom_sf()
 ```
 
-<img src="./sol-1.png" alt="The Statue of Liberty"  />
-
+![The Statue of
+Liberty](../man/figures/README-statue_liberty-1.png){width="100%"}
 
 ### Geocoding and reverse geocoding
 
@@ -111,11 +115,14 @@ example, but `full_results = TRUE` can be used to return all of the data from
 the geocoder service.
 
 
-|query                                      | latitude|  longitude|address                                                                                                           |
-|:------------------------------------------|--------:|----------:|:-----------------------------------------------------------------------------------------------------------------|
-|1600 Pennsylvania Ave NW, Washington, DC   | 38.89770|  -77.03655|White House, 1600, Pennsylvania Avenue Northwest, Washington, District of Columbia, 20500, United States          |
-|600 Montgomery St, San Francisco, CA 94111 | 37.79520| -122.40279|Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, California, 94111, United States |
-|233 S Wacker Dr, Chicago, IL 60606         | 41.87887|  -87.63591|Willis Tower, 233, South Wacker Drive, Printer's Row, Loop, Chicago, Cook County, Illinois, 60606, United States  |
+
+|query                                      | latitude|  longitude|address                                                                                                                                     |
+|:------------------------------------------|--------:|----------:|:-------------------------------------------------------------------------------------------------------------------------------------------|
+|1600 Pennsylvania Ave NW, Washington, DC   | 38.89770|  -77.03655|White House, 1600, Pennsylvania Avenue Northwest, Washington, District of Columbia, 20500, United States                                    |
+|600 Montgomery St, San Francisco, CA 94111 | 37.79520| -122.40279|Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, CAL Fire Northern Region, California, 94111, United States |
+|233 S Wacker Dr, Chicago, IL 60606         | 41.87874|  -87.63596|Willis Tower, 233, South Wacker Drive, Printer's Row, Loop, Chicago, Cook County, Illinois, 60606, United States                            |
+
+
 
 To perform reverse geocoding (obtaining addresses from geographic coordinates),
 we can use the `reverse_geo_lite()` function. The arguments are similar to the
@@ -132,12 +139,17 @@ reverse <- reverse_geo_lite(
 ```
 
 
-|address_found                                                                                                     |      lat|        lon|
-|:-----------------------------------------------------------------------------------------------------------------|--------:|----------:|
-|White House, 1600, Pennsylvania Avenue Northwest, Washington, District of Columbia, 20500, United States          | 38.89770|  -77.03655|
-|Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, California, 94111, United States | 37.79520| -122.40279|
-|Willis Tower, West Adams Street, Printer's Row, Loop, Chicago, Cook County, Illinois, 60606, United States        | 41.87874|  -87.63602|
+
+|address_found                                                                                                                               |      lat|        lon|
+|:-------------------------------------------------------------------------------------------------------------------------------------------|--------:|----------:|
+|White House, 1600, Pennsylvania Avenue Northwest, Washington, District of Columbia, 20500, United States                                    | 38.89770|  -77.03655|
+|Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, CAL Fire Northern Region, California, 94111, United States | 37.79520| -122.40279|
+|Willis Tower, 233, South Wacker Drive, Printer's Row, Loop, Chicago, Cook County, Illinois, 60606, United States                            | 41.87874|  -87.63596|
+
+
 
 For more advance users, see [Nominatim
 docs](https://nominatim.org/release-docs/latest/api/Search/) to check the
 parameters available.
+
+## References

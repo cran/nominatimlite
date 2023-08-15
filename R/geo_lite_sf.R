@@ -2,9 +2,9 @@
 #'
 #' @description
 #' This function allows you to geocode addresses and return the corresponding
-#' spatial object. This function returns the \pkg{sf} spatial object
+#' spatial object. This function returns the \CRANpkg{sf} spatial object
 #' associated with the query, see [geo_lite_sf()] for retrieving the data in
-#' `tibble` format.
+#' \CRANpkg{tibble} format.
 #'
 #'
 #' @param full_results returns all available data from the API service.
@@ -48,16 +48,18 @@
 #' string <- "Statue of Liberty, NY, USA"
 #' sol <- geo_lite_sf(string)
 #'
-#' ggplot(sol) +
-#'   geom_sf()
+#' if (any(!sf::st_is_empty(sol))) {
+#'   ggplot(sol) +
+#'     geom_sf()
+#' }
 #'
 #' sol_poly <- geo_lite_sf(string, points_only = FALSE)
 #'
-#' ggplot(sol_poly) +
-#'   geom_sf() +
-#'   geom_sf(data = sol, color = "red")
-#'
-#'
+#' if (any(!sf::st_is_empty(sol_poly))) {
+#'   ggplot(sol_poly) +
+#'     geom_sf() +
+#'     geom_sf(data = sol, color = "red")
+#' }
 #' # Several results
 #'
 #' Madrid <- geo_lite_sf("Madrid",
@@ -65,17 +67,10 @@
 #'   points_only = FALSE, full_results = TRUE
 #' )
 #'
-#'
-#' ggplot(Madrid) +
-#'   geom_sf(fill = NA)
-#'
-#' Starbucks <- geo_lite_sf("Starbucks, New York",
-#'   limit = 20, full_results = TRUE
-#' )
-#'
-#'
-#' ggplot(Starbucks) +
-#'   geom_sf()
+#' if (any(!sf::st_is_empty(Madrid))) {
+#'   ggplot(Madrid) +
+#'     geom_sf(fill = NA)
+#' }
 #' }
 #' @export
 #'

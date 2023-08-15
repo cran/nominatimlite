@@ -54,8 +54,8 @@ A \code{sf} object with the results.
 This function search amenities as defined by OpenStreetMap on a restricted
 area defined by a bounding box in the form of
 \verb{(<min_latitude>, <min_longitude>, <max_latitude>, <max_longitude>)}. This
-function returns the \pkg{sf} spatial object associated with the query, see
-\code{\link[=geo_amenity]{geo_amenity()}} for retrieving the data in \code{tibble} format.
+function returns the \CRANpkg{sf} spatial object associated with the query,
+see \code{\link[=geo_amenity]{geo_amenity()}} for retrieving the data in \CRANpkg{tibble} format.
 }
 \details{
 Bounding boxes can be located using different online tools, as
@@ -97,15 +97,19 @@ bbox <- c(-3.888954, 40.311977, -3.517916, 40.643729)
 
 rest_pub <- geo_amenity_sf(bbox, c("restaurant", "pub"), limit = 50)
 
-ggplot(rest_pub) +
-  geom_sf()
+if (any(!sf::st_is_empty(rest_pub))) {
+  ggplot(rest_pub) +
+    geom_sf()
+}
 
 # Hospital as polygon
 
 hosp <- geo_amenity_sf(bbox, "hospital", points_only = FALSE)
 
-ggplot(hosp) +
-  geom_sf()
+if (any(!sf::st_is_empty(hosp))) {
+  ggplot(hosp) +
+    geom_sf()
+}
 }
 \dontshow{\}) # examplesIf}
 }
@@ -124,7 +128,7 @@ Geocoding strings:
 \code{\link{geo_lite_sf}()},
 \code{\link{geo_lite}()}
 
-Get spatial (`sf`) objects: 
+Get spatial (\code{sf}) objects: 
 \code{\link{bbox_to_poly}()},
 \code{\link{geo_address_lookup_sf}()},
 \code{\link{geo_lite_sf}()},

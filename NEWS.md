@@ -1,3 +1,8 @@
+# nominatimlite 0.2.1
+
+-   Remove **osmdata** from Suggests.
+-   Fix examples.
+
 # nominatimlite 0.2.0
 
 -   **rlang** and **tibble** are not explicitly required. Conversions to tibble

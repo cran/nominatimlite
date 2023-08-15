@@ -4,8 +4,8 @@
 #' This function search amenities as defined by OpenStreetMap on a restricted
 #' area defined by a bounding box in the form of
 #' `(<min_latitude>, <min_longitude>, <max_latitude>, <max_longitude>)`. This
-#' function returns the \pkg{sf} spatial object associated with the query, see
-#' [geo_amenity()] for retrieving the data in `tibble` format.
+#' function returns the \CRANpkg{sf} spatial object associated with the query,
+#' see [geo_amenity()] for retrieving the data in \CRANpkg{tibble} format.
 #'
 #' @inheritParams geo_lite_sf
 #' @inheritParams geo_amenity
@@ -39,15 +39,19 @@
 #'
 #' rest_pub <- geo_amenity_sf(bbox, c("restaurant", "pub"), limit = 50)
 #'
-#' ggplot(rest_pub) +
-#'   geom_sf()
+#' if (any(!sf::st_is_empty(rest_pub))) {
+#'   ggplot(rest_pub) +
+#'     geom_sf()
+#' }
 #'
 #' # Hospital as polygon
 #'
 #' hosp <- geo_amenity_sf(bbox, "hospital", points_only = FALSE)
 #'
-#' ggplot(hosp) +
-#'   geom_sf()
+#' if (any(!sf::st_is_empty(hosp))) {
+#'   ggplot(hosp) +
+#'     geom_sf()
+#' }
 #' }
 #' @export
 geo_amenity_sf <- function(bbox,

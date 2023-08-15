@@ -19,7 +19,7 @@ instead of \code{bbox}}
 A \code{sfc} object of class \code{POLYGON}.
 }
 \description{
-Create a \pkg{sf} polygon object from the coordinates of a bounding box
+Create a \CRANpkg{sf} polygon object from the coordinates of a bounding box
 }
 \details{
 Bounding boxes can be located using different online tools, as
@@ -44,22 +44,25 @@ sfobj <- geo_lite_sf("seychelles", points_only = FALSE)
 
 sfobj
 
-bbox <- sf::st_bbox(sfobj)
+# Need at least one non-empty object
+if (any(!sf::st_is_empty(sfobj))) {
+  bbox <- sf::st_bbox(sfobj)
 
-bbox
+  bbox
 
-bbox_sfobj <- bbox_to_poly(bbox)
+  bbox_sfobj <- bbox_to_poly(bbox)
 
-ggplot(bbox_sfobj) +
-  geom_sf(fill = "lightblue", alpha = 0.5) +
-  geom_sf(data = sfobj, fill = "wheat")
+  ggplot(bbox_sfobj) +
+    geom_sf(fill = "lightblue", alpha = 0.5) +
+    geom_sf(data = sfobj, fill = "wheat")
+}
 }
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}
 
-Get spatial (`sf`) objects: 
+Get spatial (\code{sf}) objects: 
 \code{\link{geo_address_lookup_sf}()},
 \code{\link{geo_amenity_sf}()},
 \code{\link{geo_lite_sf}()},

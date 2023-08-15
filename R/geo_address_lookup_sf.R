@@ -3,8 +3,8 @@
 #' @description
 #' The lookup API allows to query the address and other details of one or
 #' multiple OSM objects like node, way or relation. This function returns the
-#' \pkg{sf} spatial object associated with the query, see
-#' [geo_address_lookup()] for retrieving the data in `tibble` format.
+#' \CRANpkg{sf} spatial object associated with the query, see
+#' [geo_address_lookup()] for retrieving the data in \CRANpkg{tibble} format.
 #'
 #' @return A `sf` object with the results.
 #'
@@ -28,18 +28,24 @@
 #'
 #' NotreDame <- geo_address_lookup_sf(osm_ids = 201611261, type = "W")
 #'
-#' library(ggplot2)
+#' # Need at least one non-empty object
+#' if (any(!sf::st_is_empty(NotreDame))) {
+#'   library(ggplot2)
 #'
-#' ggplot(NotreDame) +
-#'   geom_sf()
+#'   ggplot(NotreDame) +
+#'     geom_sf()
+#' }
 #'
 #' NotreDame_poly <- geo_address_lookup_sf(201611261,
 #'   type = "W",
 #'   points_only = FALSE
 #' )
 #'
-#' ggplot(NotreDame_poly) +
-#'   geom_sf()
+#'
+#' if (any(!sf::st_is_empty(NotreDame_poly))) {
+#'   ggplot(NotreDame_poly) +
+#'     geom_sf()
+#' }
 #'
 #' # It is vectorized
 #'

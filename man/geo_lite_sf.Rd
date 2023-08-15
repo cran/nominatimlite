@@ -42,9 +42,9 @@ A \code{sf} object with the results.
 }
 \description{
 This function allows you to geocode addresses and return the corresponding
-spatial object. This function returns the \pkg{sf} spatial object
+spatial object. This function returns the \CRANpkg{sf} spatial object
 associated with the query, see \code{\link[=geo_lite_sf]{geo_lite_sf()}} for retrieving the data in
-\code{tibble} format.
+\CRANpkg{tibble} format.
 }
 \details{
 See \url{https://nominatim.org/release-docs/latest/api/Search/} for additional
@@ -79,16 +79,18 @@ library(ggplot2)
 string <- "Statue of Liberty, NY, USA"
 sol <- geo_lite_sf(string)
 
-ggplot(sol) +
-  geom_sf()
+if (any(!sf::st_is_empty(sol))) {
+  ggplot(sol) +
+    geom_sf()
+}
 
 sol_poly <- geo_lite_sf(string, points_only = FALSE)
 
-ggplot(sol_poly) +
-  geom_sf() +
-  geom_sf(data = sol, color = "red")
-
-
+if (any(!sf::st_is_empty(sol_poly))) {
+  ggplot(sol_poly) +
+    geom_sf() +
+    geom_sf(data = sol, color = "red")
+}
 # Several results
 
 Madrid <- geo_lite_sf("Madrid",
@@ -96,17 +98,10 @@ Madrid <- geo_lite_sf("Madrid",
   points_only = FALSE, full_results = TRUE
 )
 
-
-ggplot(Madrid) +
-  geom_sf(fill = NA)
-
-Starbucks <- geo_lite_sf("Starbucks, New York",
-  limit = 20, full_results = TRUE
-)
-
-
-ggplot(Starbucks) +
-  geom_sf()
+if (any(!sf::st_is_empty(Madrid))) {
+  ggplot(Madrid) +
+    geom_sf(fill = NA)
+}
 }
 \dontshow{\}) # examplesIf}
 }
@@ -118,7 +113,7 @@ Geocoding strings:
 \code{\link{geo_amenity}()},
 \code{\link{geo_lite}()}
 
-Get spatial (`sf`) objects: 
+Get spatial (\code{sf}) objects: 
 \code{\link{bbox_to_poly}()},
 \code{\link{geo_address_lookup_sf}()},
 \code{\link{geo_amenity_sf}()},

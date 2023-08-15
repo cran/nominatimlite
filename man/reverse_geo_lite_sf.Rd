@@ -45,8 +45,8 @@ A \code{sf} object with the results.
 \description{
 Generates an address from a latitude and longitude. Latitudes must be
 between \verb{[-90, 90]} and longitudes between \verb{[-180, 180]}. This function
-returns the \pkg{sf} spatial object associated with the query, see
-\code{\link[=reverse_geo_lite]{reverse_geo_lite()}} for retrieving the data in \code{tibble} format.
+returns the \CRANpkg{sf} spatial object associated with the query, see
+\code{\link[=reverse_geo_lite]{reverse_geo_lite()}} for retrieving the data in \CRANpkg{tibble} format.
 }
 \details{
 See \url{https://nominatim.org/release-docs/develop/api/Reverse/} for additional
@@ -57,7 +57,7 @@ parameters to be passed to \code{custom_query}.
 
 Use the option \code{custom_query = list(zoom = 3)} to adjust the output. Some
 equivalences on terms of zoom:\tabular{rl}{
-   zoom \tab address_detail \cr
+   \strong{zoom} \tab \strong{address_detail} \cr
    3 \tab country \cr
    5 \tab state \cr
    8 \tab county \cr
@@ -94,42 +94,39 @@ in case of \code{points_only = FALSE}  multiple geometry types may be returned.
 \donttest{
 library(ggplot2)
 
+# Coliseum coords
+col_lon <- 12.49309
+col_lat <- 41.89026
 
-Coliseum <- geo_lite("Coliseo, Rome, Italy")
-
-# Coliseum
-Col_sf <- reverse_geo_lite_sf(
-  lat = Coliseum$lat,
-  lon = Coliseum$lon,
+# Coliseum as polygon
+col_sf <- reverse_geo_lite_sf(
+  lat = col_lat,
+  lon = col_lon,
   points_only = FALSE
 )
 
-ggplot(Col_sf) +
-  geom_sf()
+dplyr::glimpse(col_sf)
 
-# City of Rome - Zoom 10
+if (any(!sf::st_is_empty(col_sf))) {
+  ggplot(col_sf) +
+    geom_sf()
+}
 
-Rome_sf <- reverse_geo_lite_sf(
-  lat = Coliseum$lat,
-  lon = Coliseum$lon,
+# City of Rome - same coords with zoom 10
+
+rome_sf <- reverse_geo_lite_sf(
+  lat = col_lat,
+  lon = col_lon,
   custom_query = list(zoom = 10),
   points_only = FALSE
 )
 
-ggplot(Rome_sf) +
-  geom_sf()
+dplyr::glimpse(rome_sf)
 
-# County - Zoom 8
-
-County_sf <- reverse_geo_lite_sf(
-  lat = Coliseum$lat,
-  lon = Coliseum$lon,
-  custom_query = list(zoom = 8),
-  points_only = FALSE
-)
-
-ggplot(County_sf) +
-  geom_sf()
+if (any(!sf::st_is_empty(rome_sf))) {
+  ggplot(rome_sf) +
+    geom_sf()
+}
 }
 \dontshow{\}) # examplesIf}
 }
@@ -139,7 +136,7 @@ ggplot(County_sf) +
 Reverse geocoding coordinates: 
 \code{\link{reverse_geo_lite}()}
 
-Get spatial (`sf`) objects: 
+Get spatial (\code{sf}) objects: 
 \code{\link{bbox_to_poly}()},
 \code{\link{geo_address_lookup_sf}()},
 \code{\link{geo_amenity_sf}()},

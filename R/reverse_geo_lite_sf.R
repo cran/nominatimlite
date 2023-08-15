@@ -3,8 +3,8 @@
 #' @description
 #' Generates an address from a latitude and longitude. Latitudes must be
 #' between `[-90, 90]` and longitudes between `[-180, 180]`. This function
-#' returns the \pkg{sf} spatial object associated with the query, see
-#' [reverse_geo_lite()] for retrieving the data in `tibble` format.
+#' returns the \CRANpkg{sf} spatial object associated with the query, see
+#' [reverse_geo_lite()] for retrieving the data in \CRANpkg{tibble} format.
 #'
 #' @inheritParams reverse_geo_lite
 #' @inheritParams geo_lite_sf
@@ -22,42 +22,39 @@
 #' \donttest{
 #' library(ggplot2)
 #'
+#' # Coliseum coords
+#' col_lon <- 12.49309
+#' col_lat <- 41.89026
 #'
-#' Coliseum <- geo_lite("Coliseo, Rome, Italy")
-#'
-#' # Coliseum
-#' Col_sf <- reverse_geo_lite_sf(
-#'   lat = Coliseum$lat,
-#'   lon = Coliseum$lon,
+#' # Coliseum as polygon
+#' col_sf <- reverse_geo_lite_sf(
+#'   lat = col_lat,
+#'   lon = col_lon,
 #'   points_only = FALSE
 #' )
 #'
-#' ggplot(Col_sf) +
-#'   geom_sf()
+#' dplyr::glimpse(col_sf)
 #'
-#' # City of Rome - Zoom 10
+#' if (any(!sf::st_is_empty(col_sf))) {
+#'   ggplot(col_sf) +
+#'     geom_sf()
+#' }
 #'
-#' Rome_sf <- reverse_geo_lite_sf(
-#'   lat = Coliseum$lat,
-#'   lon = Coliseum$lon,
+#' # City of Rome - same coords with zoom 10
+#'
+#' rome_sf <- reverse_geo_lite_sf(
+#'   lat = col_lat,
+#'   lon = col_lon,
 #'   custom_query = list(zoom = 10),
 #'   points_only = FALSE
 #' )
 #'
-#' ggplot(Rome_sf) +
-#'   geom_sf()
+#' dplyr::glimpse(rome_sf)
 #'
-#' # County - Zoom 8
-#'
-#' County_sf <- reverse_geo_lite_sf(
-#'   lat = Coliseum$lat,
-#'   lon = Coliseum$lon,
-#'   custom_query = list(zoom = 8),
-#'   points_only = FALSE
-#' )
-#'
-#' ggplot(County_sf) +
-#'   geom_sf()
+#' if (any(!sf::st_is_empty(rome_sf))) {
+#'   ggplot(rome_sf) +
+#'     geom_sf()
+#' }
 #' }
 #' @export
 #'
