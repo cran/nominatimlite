@@ -2,7 +2,7 @@
 % Please edit documentation in R/geo_lite.R
 \name{geo_lite}
 \alias{geo_lite}
-\title{Address Search API for OSM objects}
+\title{Address search API for OSM elements}
 \usage{
 geo_lite(
   address,
@@ -12,11 +12,12 @@ geo_lite(
   full_results = FALSE,
   return_addresses = TRUE,
   verbose = FALSE,
+  progressbar = TRUE,
   custom_query = list()
 )
 }
 \arguments{
-\item{address}{character with single line address
+\item{address}{character with single line address, e.g.
 (\code{"1600 Pennsylvania Ave NW, Washington"}) or a vector of addresses
 (\code{c("Madrid", "Barcelona")}).}
 
@@ -35,17 +36,19 @@ returned. See also \code{return_addresses}.}
 
 \item{verbose}{if \code{TRUE} then detailed logs are output to the console.}
 
+\item{progressbar}{Logical. If \code{TRUE} displays a progress bar to indicate
+the progress of the function.}
+
 \item{custom_query}{A named list with API-specific parameters to be used
 (i.e. \code{list(countrycodes = "US")}). See \strong{Details}.}
 }
 \value{
-A \code{tibble} with the results.
+A \CRANpkg{tibble} with the results.
 }
 \description{
-Geocodes addresses given as character values. This
-function returns the \CRANpkg{tibble} associated with the query, see
-\code{\link[=geo_lite_sf]{geo_lite_sf()}} for retrieving the data as a spatial object
-(\CRANpkg{sf} format).
+Geocodes addresses given as character values. This function returns the
+\CRANpkg{tibble} associated with the query, see \code{\link[=geo_lite_sf]{geo_lite_sf()}} for
+retrieving the data as a spatial object (\CRANpkg{sf} format).
 }
 \details{
 See \url{https://nominatim.org/release-docs/latest/api/Search/} for additional
@@ -71,10 +74,8 @@ geo_lite(c("Madrid", "Barcelona"),
 \code{\link[=geo_lite_sf]{geo_lite_sf()}}, \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}
 
 Geocoding strings: 
-\code{\link{geo_address_lookup_sf}()},
 \code{\link{geo_address_lookup}()},
-\code{\link{geo_amenity_sf}()},
-\code{\link{geo_amenity}()},
+\code{\link{geo_address_lookup_sf}()},
 \code{\link{geo_lite_sf}()}
 }
 \concept{geocoding}

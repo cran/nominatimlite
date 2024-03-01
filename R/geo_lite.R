@@ -1,12 +1,11 @@
-#' Address Search API for OSM objects
+#' Address search API for OSM elements
 #'
 #' @description
-#' Geocodes addresses given as character values. This
-#' function returns the \CRANpkg{tibble} associated with the query, see
-#' [geo_lite_sf()] for retrieving the data as a spatial object
-#' (\CRANpkg{sf} format).
+#' Geocodes addresses given as character values. This function returns the
+#' \CRANpkg{tibble} associated with the query, see [geo_lite_sf()] for
+#' retrieving the data as a spatial object (\CRANpkg{sf} format).
 #'
-#' @param address character with single line address
+#' @param address character with single line address, e.g.
 #'   (`"1600 Pennsylvania Ave NW, Washington"`) or a vector of addresses
 #'   (`c("Madrid", "Barcelona")`).
 #' @param lat	latitude column name in the output data (default  `"lat"`).
@@ -18,6 +17,8 @@
 #'    returned. See also `return_addresses`.
 #' @param return_addresses return input addresses with results if `TRUE`.
 #' @param verbose if `TRUE` then detailed logs are output to the console.
+#' @param progressbar Logical. If `TRUE` displays a progress bar to indicate
+#'   the progress of the function.
 #' @param custom_query A named list with API-specific parameters to be used
 #'   (i.e. `list(countrycodes = "US")`). See **Details**.
 #'
@@ -26,7 +27,7 @@
 #' See <https://nominatim.org/release-docs/latest/api/Search/> for additional
 #' parameters to be passed to `custom_query`.
 #'
-#' @return A `tibble` with the results.
+#' @return A \CRANpkg{tibble} with the results.
 #'
 #' @examplesIf nominatim_check_access()
 #' \donttest{
@@ -52,6 +53,7 @@ geo_lite <- function(address,
                      full_results = FALSE,
                      return_addresses = TRUE,
                      verbose = FALSE,
+                     progressbar = TRUE,
                      custom_query = list()) {
   if (limit > 50) {
     message(paste(
@@ -66,9 +68,22 @@ geo_lite <- function(address,
   init_key <- dplyr::tibble(query = address)
   key <- unique(address)
 
-  all_res <- lapply(key, function(x) {
+  # Set progress bar
+  ntot <- length(key)
+  # Set progress bar if n > 1
+  progressbar <- all(progressbar, ntot > 1)
+  if (progressbar) {
+    pb <- txtProgressBar(min = 0, max = ntot, width = 50, style = 3)
+  }
+  seql <- seq(1, ntot, 1)
+
+  all_res <- lapply(seql, function(x) {
+    ad <- key[x]
+    if (progressbar) {
+      setTxtProgressBar(pb, x)
+    }
     geo_lite_single(
-      address = x,
+      address = ad,
       lat,
       long,
       limit,
@@ -78,6 +93,7 @@ geo_lite <- function(address,
       custom_query
     )
   })
+  if (progressbar) close(pb)
 
   all_res <- dplyr::bind_rows(all_res)
   all_res <- dplyr::left_join(init_key, all_res, by = "query")

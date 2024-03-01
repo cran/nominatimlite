@@ -2,7 +2,7 @@
 % Please edit documentation in R/geo_address_lookup.R
 \name{geo_address_lookup}
 \alias{geo_address_lookup}
-\title{Address Lookup API for OSM objects}
+\title{Address lookup API for OSM elements}
 \usage{
 geo_address_lookup(
   osm_ids,
@@ -39,7 +39,7 @@ returned. See also \code{return_addresses}.}
 (i.e. \code{list(countrycodes = "US")}). See \strong{Details}.}
 }
 \value{
-A \code{tibble} with the results found by the query.
+A \CRANpkg{tibble} with the results found by the query.
 }
 \description{
 The lookup API allows to query the address and other details of one or
@@ -71,10 +71,8 @@ Address Lookup API:
 
 Geocoding strings: 
 \code{\link{geo_address_lookup_sf}()},
-\code{\link{geo_amenity_sf}()},
-\code{\link{geo_amenity}()},
-\code{\link{geo_lite_sf}()},
-\code{\link{geo_lite}()}
+\code{\link{geo_lite}()},
+\code{\link{geo_lite_sf}()}
 }
 \concept{geocoding}
 \concept{lookup}

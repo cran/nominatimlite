@@ -1,4 +1,4 @@
-#' Address Lookup API for OSM objects
+#' Address lookup API for OSM elements
 #'
 #' @description
 #' The lookup API allows to query the address and other details of one or
@@ -21,7 +21,7 @@
 #' @family lookup
 #' @family geocoding
 #'
-#' @return A `tibble` with the results found by the query.
+#' @return A \CRANpkg{tibble} with the results found by the query.
 #'
 #' @examplesIf nominatim_check_access()
 #' \donttest{

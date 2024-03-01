@@ -2,7 +2,7 @@
 % Please edit documentation in R/reverse_geo_lite_sf.R
 \name{reverse_geo_lite_sf}
 \alias{reverse_geo_lite_sf}
-\title{Reverse Geocoding API for OSM objects in Spatial format}
+\title{Reverse geocoding API for OSM elements in \CRANpkg{sf} format}
 \usage{
 reverse_geo_lite_sf(
   lat,
@@ -11,6 +11,7 @@ reverse_geo_lite_sf(
   full_results = FALSE,
   return_coords = TRUE,
   verbose = FALSE,
+  progressbar = TRUE,
   custom_query = list(),
   points_only = TRUE
 )
@@ -32,6 +33,9 @@ returned. See also \code{return_addresses}.}
 
 \item{verbose}{if \code{TRUE} then detailed logs are output to the console.}
 
+\item{progressbar}{Logical. If \code{TRUE} displays a progress bar to indicate
+the progress of the function.}
+
 \item{custom_query}{API-specific parameters to be used, passed as a named
 list (ie. \code{list(zoom = 3)}). See \strong{Details}.}
 
@@ -40,12 +44,12 @@ points (\code{TRUE}, which is the default) or potentially other shapes as
 provided by the Nominatim API (\code{FALSE}). See \strong{About Geometry Types}.}
 }
 \value{
-A \code{sf} object with the results.
+A \CRANpkg{sf} object with the results.
 }
 \description{
 Generates an address from a latitude and longitude. Latitudes must be
 between \verb{[-90, 90]} and longitudes between \verb{[-180, 180]}. This function
-returns the \CRANpkg{sf} spatial object associated with the query, see
+returns the spatial object associated with the query using \CRANpkg{sf}, see
 \code{\link[=reverse_geo_lite]{reverse_geo_lite()}} for retrieving the data in \CRANpkg{tibble} format.
 }
 \details{
@@ -79,10 +83,10 @@ geometry) or possibly other spatial objects.
 Note that the type of geometry returned in case of \code{points_only = FALSE}
 will depend on the object being geocoded:
 \itemize{
-\item administrative areas, major buildings and the like will be
-returned as polygons
-\item rivers, roads and their like as lines
-\item amenities may be points even in case of a \code{points_only = FALSE} call
+\item Administrative areas, major buildings and the like will be
+returned as polygons.
+\item Rivers, roads and their like as lines.
+\item Amenities may be points even in case of a \code{points_only = FALSE} call.
 }
 
 The function is vectorized, allowing for multiple addresses to be geocoded;
@@ -136,10 +140,9 @@ if (any(!sf::st_is_empty(rome_sf))) {
 Reverse geocoding coordinates: 
 \code{\link{reverse_geo_lite}()}
 
-Get spatial (\code{sf}) objects: 
+Get \CRANpkg{sf} objects: 
 \code{\link{bbox_to_poly}()},
 \code{\link{geo_address_lookup_sf}()},
-\code{\link{geo_amenity_sf}()},
 \code{\link{geo_lite_sf}()}
 }
 \concept{reverse}
