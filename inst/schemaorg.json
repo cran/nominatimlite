@@ -7,19 +7,32 @@
         "id": "https://orcid.org/0000-0001-8457-4658"
       },
       "codeRepository": "https://github.com/dieghernan/nominatimlite",
-      "contributor": {
-        "id": "https://orcid.org/0000-0002-0375-5156",
-        "type": "Person",
-        "familyName": "Lacko",
-        "givenName": "Jindra"
-      },
-      "copyrightHolder": {
-        "id": "https://orcid.org/0000-0001-8457-4658",
-        "type": "Person",
-        "email": "diego.hernangomezherrero@gmail.com",
-        "familyName": "Hernangómez",
-        "givenName": "Diego"
-      },
+      "contributor": [
+        {
+          "id": "https://orcid.org/0000-0002-0375-5156",
+          "type": "Person",
+          "familyName": "Lacko",
+          "givenName": "Jindra"
+        },
+        {
+          "type": "Person",
+          "familyName": "White",
+          "givenName": "Alex"
+        }
+      ],
+      "copyrightHolder": [
+        {
+          "id": "https://orcid.org/0000-0001-8457-4658",
+          "type": "Person",
+          "email": "diego.hernangomezherrero@gmail.com",
+          "familyName": "Hernangómez",
+          "givenName": "Diego"
+        },
+        {
+          "type": "Organization",
+          "name": "OpenStreetMap"
+        }
+      ],
       "description": "Lite interface for getting data from 'OSM' service 'Nominatim' <https://nominatim.org/release-docs/latest/>. Extract coordinates from addresses, find places near a set of coordinates and return spatial objects on 'sf' format.",
       "license": "https://spdx.org/licenses/MIT",
       "name": "nominatimlite: Interface with 'Nominatim' API Service",
@@ -34,8 +47,8 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "runtimePlatform": "R version 4.3.2 (2023-10-31)",
-      "version": "0.2.1.9000"
+      "runtimePlatform": "R version 4.4.0 (2024-04-24 ucrt)",
+      "version": "0.4.0"
     },
     {
       "id": "https://doi.org/10.5281/zenodo.5113195",

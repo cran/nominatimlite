@@ -1,3 +1,39 @@
+# nominatimlite 0.4.0
+
+-   New functions:
+
+    -   `geo_lite_struct()` and `geo_lite_struct_sf()` for performing structured
+        queries.
+    -   Bring back `geo_amenity()` and `geo_amenity_sf()` as a wrapper of
+        `geo_lite_struct()` / `geo_lite_struct_sf()`, so now are more robust and
+        compatible with **sf** objects.
+
+-   Improve unnesting of fields when requiring `extratags`, i.e.
+    `custom_query = list(extratags = TRUE)`.
+
+-   It is possible to use **nominatimlite** with local server thanks to the new
+    argument `nominatim_server` (#42 \@alexwhitedatamine).
+
+-   Adapt endpoints to **Nominatim v4.4.0** `[Python-only]`.
+
+-   `nominatimlite::osm_amenities` data set re-introduced, updated and with
+    additional description fields.
+
+-   API call for non-spatial function uses now JSONV2 format (`&format=jsonv2`).
+    This implies the following changes in the output:
+
+    -   `class` renamed to `category`.
+    -   additional field `place_rank` with the search rank of the object.
+
+-   `custom_query` argument can use vectors and `logical`:
+
+    ``` r
+    geo_lite(address = "New York",
+             custom_query = list(addressdetails = TRUE,
+                                 viewbox = c(-60, -20, 60, 20))
+             )
+    ```
+
 # nominatimlite 0.3.0
 
 -   Add a `progressbar` parameter to `geo_lite()`, `geo_lite_sf()`,
@@ -20,7 +56,7 @@
 
 -   **rlang** and **tibble** are not explicitly required. Conversions to tibble
     happens with `dplyr::tibble()`.
--   The data attributes of **sf** objects are returned now as tibble, for easy
+-   The data attributes of **sf** objects are returned now as `tibble`, for easy
     printing in console.
 -   Improvements in code and tests.
 -   Now **sf** objects can handle correctly nested fields provided in the json
@@ -53,7 +89,7 @@
 # nominatimlite 0.1.2
 
 -   New internal: `nominatim_check_access()`.
--   Adapt tests to **testthat** v3.1.0.
+-   Adapt tests to **testthat** `v3.1.0`.
 
 # nominatimlite 0.1.1
 
@@ -64,7 +100,7 @@
 -   **CRAN** release.
 -   Adjust query rate limits to Nominatim policy.
 -   New `strict` argument on `geo_amenity()` and `geo_amenity_sf()`.
--   Parameter `polygon` changed to `points_only` #8 thanks to @jlacko.
+-   Parameter `polygon` changed to `points_only` (#8) thanks to @jlacko.
 -   Package now falls gracefully if url not reachable.
 
 # nominatimlite 0.0.1

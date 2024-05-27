@@ -3,17 +3,20 @@
 #' @description
 #'
 #' Generates an address from a latitude and longitude. Latitudes must be
-#' between `[-90, 90]` and longitudes between `[-180, 180]`. This
-#' function returns the \CRANpkg{tibble} associated with the query, see
+#' between \eqn{\left[-90, 90 \right]} and longitudes between
+#' \eqn{\left[-180, 180 \right]}. This function returns the
+#' [`tibble`][tibble::tibble] associated with the query, see
 #' [reverse_geo_lite_sf()] for retrieving the data as a spatial object
-#' (\CRANpkg{sf}) format).
+#' ([`sf`][sf::st_sf] format).
 #'
-#' @param lat  latitude values in numeric format. Must be in the range
-#'   `[-90, 90]`.
-#' @param long  longitude values in numeric format. Must be in the range
-#'   `[-180, 180]`.
-#' @param address address column name in the output data (default  `"address"`).
-#' @param return_coords	return input coordinates with results if `TRUE`.
+#' @family reverse
+#'
+#' @param lat Latitude values in numeric format. Must be in the range
+#'   \eqn{\left[-90, 90 \right]}.
+#' @param long Longitude values in numeric format. Must be in the range
+#'   \eqn{\left[-180, 180 \right]}.
+#' @param address Address column name in the output data (default  `"address"`).
+#' @param return_coords	Return input coordinates with results if `TRUE`.
 #' @param custom_query API-specific parameters to be used, passed as a named
 #'   list (ie. `list(zoom = 3)`). See **Details**.
 #'
@@ -34,14 +37,14 @@
 #'
 #' t <- dplyr::tribble(
 #'  ~zoom, ~address_detail,
-#'  3, "country",
-#'  5, "state",
-#'  8, "county",
-#'  10, "city",
-#'  14, "suburb",
-#'  16, "major streets",
-#'  17, "major and minor streets",
-#'  18, "building"
+#'  "`3`", "country",
+#'  "`5`", "state",
+#'  "`8`", "county",
+#'  "`10`", "city",
+#'  "`14`", "suburb",
+#'  "`16`", "major streets",
+#'  "`17`", "major and minor streets",
+#'  "`18`", "building"
 #'  )
 #'
 #' knitr::kable(t, col.names = paste0("**", names(t), "**"))
@@ -49,7 +52,16 @@
 #'
 #' ```
 #'
-#' @return A \CRANpkg{tibble} with the results.
+#' @return
+#'
+#' ```{r child = "man/chunks/tibbleout.Rmd"}
+#' ```
+#'
+#' @seealso
+#' [reverse_geo_lite_sf()], [tidygeocoder::reverse_geo()].
+#'
+#' @export
+#'
 #'
 #' @examplesIf nominatim_check_access()
 #' \donttest{
@@ -62,24 +74,20 @@
 #' # With options: zoom to country level
 #' sev <- reverse_geo_lite(
 #'   lat = c(40.75728, 55.95335), long = c(-73.98586, -3.188375),
-#'   custom_query = list(zoom = 0, extratags = 1),
+#'   custom_query = list(zoom = 0, extratags = TRUE),
 #'   verbose = TRUE, full_results = TRUE
 #' )
 #'
 #' dplyr::glimpse(sev)
 #' }
-#'
-#' @export
-#'
-#' @seealso [reverse_geo_lite_sf()], [tidygeocoder::reverse_geo()]
-#' @family reverse
-#'
 reverse_geo_lite <- function(lat,
                              long,
                              address = "address",
                              full_results = FALSE,
                              return_coords = TRUE,
                              verbose = FALSE,
+                             nominatim_server =
+                               "https://nominatim.openstreetmap.org/",
                              progressbar = TRUE,
                              custom_query = list()) {
   # Check inputs
@@ -131,13 +139,14 @@ reverse_geo_lite <- function(lat,
     }
     rw <- key[x, ]
     res_single <- reverse_geo_lite_single(
-      as.double(rw$lat_cap_int),
-      as.double(rw$long_cap_int),
-      address,
-      full_results,
-      return_coords,
-      verbose,
-      custom_query
+      lat_cap = as.double(rw$lat_cap_int),
+      long_cap = as.double(rw$long_cap_int),
+      address = address,
+      full_results = full_results,
+      return_coords = return_coords,
+      verbose = verbose,
+      custom_query = custom_query,
+      nominatim_server = nominatim_server
     )
 
     res_single <- dplyr::bind_cols(res_single, rw[, c(1, 2)])
@@ -164,12 +173,15 @@ reverse_geo_lite_single <- function(lat_cap,
                                     full_results = FALSE,
                                     return_coords = TRUE,
                                     verbose = TRUE,
+                                    nominatim_server =
+                                      "https://nominatim.openstreetmap.org/",
                                     custom_query = list()) {
-  # Step 1: Download ----
-  api <- "https://nominatim.openstreetmap.org/reverse?"
+  # First build the api address. If the passed nominatim_server does not end
+  # with a trailing forward-slash, add one
+  api <- prepare_api_url(nominatim_server, "reverse?")
 
   # Compose url
-  url <- paste0(api, "lat=", lat_cap, "&lon=", long_cap, "&format=json")
+  url <- paste0(api, "lat=", lat_cap, "&lon=", long_cap, "&format=jsonv2")
 
   if (isFALSE(full_results)) {
     url <- paste0(url, "&addressdetails=0")
@@ -189,13 +201,11 @@ reverse_geo_lite_single <- function(lat_cap,
 
 
 
-  # nocov start
   if (isFALSE(res)) {
     message(url, " not reachable.")
-    out <- empty_tbl(tbl_query, address)
+    out <- empty_tbl_rev(tbl_query, address)
     return(invisible(out))
   }
-  # nocov end
 
   result_init <- jsonlite::fromJSON(json, flatten = TRUE)
 

@@ -3,25 +3,36 @@
 #' @description
 #' The lookup API allows to query the address and other details of one or
 #' multiple OSM objects like node, way or relation. This function returns the
-#' \CRANpkg{tibble} associated with the query, see [geo_address_lookup_sf()] for
-#' retrieving the data as a spatial object (\CRANpkg{sf} format).
+#' [`tibble`][tibble::tibble] associated with the query, see
+#' [geo_address_lookup_sf()] for retrieving the data as a spatial object
+#' ([`sf`][sf::st_sf] format).
 #'
-#' @param osm_ids vector of OSM identifiers as **numeric**
+#' @family lookup
+#' @family geocoding
+#'
+#' @param osm_ids Vector of OSM identifiers as **numeric**
 #'   (`c(00000, 11111, 22222)`).
-#' @param type vector character of the type of the OSM type associated to each
+#' @param type Vector character of the type of the OSM type associated to each
 #'   `osm_ids`. Possible values are node (`"N"`), way (`"W"`) or relation
 #'   (`"R"`). If a single value is provided it would be recycled.
+#'
 #' @inheritParams geo_lite
 #'
 #' @details
 #' See <https://nominatim.org/release-docs/develop/api/Lookup/> for additional
 #' parameters to be passed to `custom_query`.
 #'
-#' @seealso [geo_address_lookup_sf()]
-#' @family lookup
-#' @family geocoding
+#' @seealso
+#' [geo_address_lookup_sf()].
 #'
-#' @return A \CRANpkg{tibble} with the results found by the query.
+#'
+#' @return
+#'
+#' ```{r child = "man/chunks/tibbleout.Rmd"}
+#' ```
+#'
+#' @export
+#'
 #'
 #' @examplesIf nominatim_check_access()
 #' \donttest{
@@ -32,8 +43,6 @@
 #' several <- geo_address_lookup(c(146656, 240109189), type = c("R", "N"))
 #' several
 #' }
-#' @export
-
 geo_address_lookup <- function(osm_ids,
                                type = c("N", "W", "R"),
                                lat = "lat",
@@ -41,9 +50,13 @@ geo_address_lookup <- function(osm_ids,
                                full_results = FALSE,
                                return_addresses = TRUE,
                                verbose = FALSE,
+                               nominatim_server =
+                                 "https://nominatim.openstreetmap.org/",
                                custom_query = list()) {
   # Step 1: Download ----
-  api <- "https://nominatim.openstreetmap.org/lookup?"
+  # First build the api address. If the passed nominatim_server does not end
+  # with a trailing forward-slash, add one
+  api <- prepare_api_url(nominatim_server, "lookup?")
 
   # Prepare nodes
   osm_ids <- as.integer(osm_ids)
@@ -51,7 +64,7 @@ geo_address_lookup <- function(osm_ids,
   nodes <- paste0(type, osm_ids, collapse = ",")
 
   # Compose url
-  url <- paste0(api, "osm_ids=", nodes, "&format=json")
+  url <- paste0(api, "osm_ids=", nodes, "&format=jsonv2")
 
   if (full_results) url <- paste0(url, "&addressdetails=1")
 
@@ -68,14 +81,12 @@ geo_address_lookup <- function(osm_ids,
   # Keep a tbl with the query
   tbl_query <- dplyr::tibble(query = paste0(type, osm_ids))
 
-  # nocov start
   # If no response...
   if (isFALSE(res)) {
     message(url, " not reachable.")
     out <- empty_tbl(tbl_query, lat, long)
     return(invisible(out))
   }
-  # nocov end
   result <- dplyr::as_tibble(jsonlite::fromJSON(json, flatten = TRUE))
 
 

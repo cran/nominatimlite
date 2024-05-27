@@ -2,15 +2,15 @@
 % Please edit documentation in R/bbox_to_poly.R
 \name{bbox_to_poly}
 \alias{bbox_to_poly}
-\title{Coerce a bounding box to a \code{sfc} \code{POLYGON} object}
+\title{Coerce a bounding box to a \code{\link[sf:sfc]{sfc}} \code{POLYGON} object}
 \usage{
 bbox_to_poly(bbox = NA, xmin = NA, ymin = NA, xmax = NA, ymax = NA, crs = 4326)
 }
 \arguments{
-\item{bbox}{numeric vector of 4 elements representing the coordinates of the
+\item{bbox}{Numeric vector of 4 elements representing the coordinates of the
 bounding box. Values should be \code{c(xmin, ymin, xmax, ymax)}.}
 
-\item{xmin, ymin, xmax, ymax}{alternatively, you can use these named parameters
+\item{xmin, ymin, xmax, ymax}{Alternatively, you can use these named parameters
 instead of \code{bbox}.}
 
 \item{crs}{coordinate reference system, something suitable as input to \link[sf]{st_crs}}
@@ -19,12 +19,10 @@ instead of \code{bbox}.}
 A \code{\link[sf:sfc]{sfc}} object of class \code{POLYGON}.
 }
 \description{
-Create a \code{\link[sf:sfc]{sfc}} object from the coordinates of a
-bounding box.
+Create a \code{\link[sf:sfc]{sfc}} object from the coordinates of a bounding box.
 }
 \details{
-Bounding boxes can be located using different online tools, as
-\href{https://boundingbox.klokantech.com/}{Bounding Box Tool}.
+Bounding boxes can be located using different online tools, as \href{https://boundingbox.klokantech.com/}{Bounding Box Tool}.
 }
 \examples{
 \dontshow{if (nominatim_check_access()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -63,9 +61,11 @@ if (any(!sf::st_is_empty(sfobj))) {
 \seealso{
 \code{\link[sf:st_as_sfc]{sf::st_as_sfc()}} and \code{\link[sf:sfc]{sf::st_sfc()}}.
 
-Get \CRANpkg{sf} objects: 
+Get \code{\link[sf:sf]{sf}} objects: 
 \code{\link{geo_address_lookup_sf}()},
+\code{\link{geo_amenity_sf}()},
 \code{\link{geo_lite_sf}()},
+\code{\link{geo_lite_struct_sf}()},
 \code{\link{reverse_geo_lite_sf}()}
 }
 \concept{spatial}

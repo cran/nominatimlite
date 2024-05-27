@@ -1,16 +1,21 @@
-#' Address search API for OSM elements in \CRANpkg{sf} format
+#' Address search API for OSM elements in \CRANpkg{sf} format (free-form query)
 #'
 #' @description
-#' This function allows you to geocode addresses and return the corresponding
+#' This function allows you to geocode addresses and returns the corresponding
 #' spatial object. This function returns the spatial object associated with the
-#' query using \CRANpkg{sf}, see [geo_lite_sf()] for retrieving the data in
-#' \CRANpkg{tibble} format.
+#' query using \CRANpkg{sf}, see [geo_lite()] for retrieving the data in
+#' [`tibble`][tibble::tibble] format.
+#'
+#' This function correspond to the **free-form query** search described in the
+#' [API endpoint](https://nominatim.org/release-docs/develop/api/Search/).
 #'
 #'
-#' @param full_results returns all available data from the API service.
+#' @family geocoding
+#' @family spatial
+#'
+#' @param full_results Returns all available data from the API service.
 #'   If `FALSE` (default) only address columns are returned. See also
 #'   `return_addresses`.
-#'
 #' @param points_only Logical `TRUE/FALSE`. Whether to return only spatial
 #'   points (`TRUE`, which is the default) or potentially other shapes as
 #'   provided by the Nominatim API (`FALSE`). See **About Geometry Types**.
@@ -38,7 +43,15 @@
 #' The function is vectorized, allowing for multiple addresses to be geocoded;
 #' in case of `points_only = FALSE`  multiple geometry types may be returned.
 #'
-#' @return A \CRANpkg{sf} object with the results.
+#' @return
+#'
+#' ```{r child = "man/chunks/sfout.Rmd"}
+#' ```
+#'
+#' @seealso
+#' [geo_lite()].
+#'
+#' @export
 #'
 #' @examplesIf nominatim_check_access()
 #' \donttest{
@@ -62,27 +75,24 @@
 #' }
 #' # Several results
 #'
-#' Madrid <- geo_lite_sf("Madrid",
+#' madrid <- geo_lite_sf("Comunidad de Madrid, Spain",
 #'   limit = 2,
 #'   points_only = FALSE, full_results = TRUE
 #' )
 #'
-#' if (any(!sf::st_is_empty(Madrid))) {
-#'   ggplot(Madrid) +
+#' if (any(!sf::st_is_empty(madrid))) {
+#'   ggplot(madrid) +
 #'     geom_sf(fill = NA)
 #' }
 #' }
-#' @export
-#'
-#' @family geocoding
-#' @family spatial
-
 geo_lite_sf <- function(address,
                         limit = 1,
                         return_addresses = TRUE,
                         full_results = FALSE,
                         verbose = FALSE,
                         progressbar = TRUE,
+                        nominatim_server =
+                          "https://nominatim.openstreetmap.org/",
                         custom_query = list(),
                         points_only = TRUE) {
   if (limit > 50) {
@@ -121,7 +131,8 @@ geo_lite_sf <- function(address,
       full_results,
       verbose,
       custom_query,
-      points_only
+      points_only,
+      nominatim_server = nominatim_server
     )
   })
 
@@ -154,10 +165,13 @@ geo_lite_sf_single <- function(address,
                                return_addresses = TRUE,
                                full_results = FALSE,
                                verbose = FALSE,
+                               nominatim_server =
+                                 "https://nominatim.openstreetmap.org/",
                                custom_query = list(),
                                points_only = TRUE) {
-  # Step 1: Download ----
-  api <- "https://nominatim.openstreetmap.org/search?q="
+  # First build the api address. If the passed nominatim_server does not end
+  # with a trailing forward-slash, add one
+  api <- prepare_api_url(nominatim_server, "search?q=")
 
   # Replace spaces with +
   address2 <- gsub(" ", "+", address)
@@ -180,13 +194,11 @@ geo_lite_sf_single <- function(address,
   # Keep a tbl with the query
   tbl_query <- dplyr::tibble(query = address)
 
-  # nocov start
   if (isFALSE(res)) {
     message(url, " not reachable.")
     out <- empty_sf(tbl_query)
     return(invisible(out))
   }
-  # nocov end
 
   # Read
   sfobj <- sf::read_sf(json, stringsAsFactors = FALSE)

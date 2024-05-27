@@ -2,7 +2,7 @@
 % Please edit documentation in R/geo_lite_sf.R
 \name{geo_lite_sf}
 \alias{geo_lite_sf}
-\title{Address search API for OSM elements in \CRANpkg{sf} format}
+\title{Address search API for OSM elements in \CRANpkg{sf} format (free-form query)}
 \usage{
 geo_lite_sf(
   address,
@@ -11,28 +11,32 @@ geo_lite_sf(
   full_results = FALSE,
   verbose = FALSE,
   progressbar = TRUE,
+  nominatim_server = "https://nominatim.openstreetmap.org/",
   custom_query = list(),
   points_only = TRUE
 )
 }
 \arguments{
-\item{address}{character with single line address, e.g.
+\item{address}{\code{character} with single line address, e.g.
 (\code{"1600 Pennsylvania Ave NW, Washington"}) or a vector of addresses
 (\code{c("Madrid", "Barcelona")}).}
 
-\item{limit}{maximum number of results to return per input address. Note
+\item{limit}{Maximum number of results to return per input address. Note
 that each query returns a maximum of 50 results.}
 
-\item{return_addresses}{return input addresses with results if \code{TRUE}.}
+\item{return_addresses}{Return input addresses with results if \code{TRUE}.}
 
-\item{full_results}{returns all available data from the API service.
+\item{full_results}{Returns all available data from the API service.
 If \code{FALSE} (default) only address columns are returned. See also
 \code{return_addresses}.}
 
-\item{verbose}{if \code{TRUE} then detailed logs are output to the console.}
+\item{verbose}{If \code{TRUE} then detailed logs are output to the console.}
 
 \item{progressbar}{Logical. If \code{TRUE} displays a progress bar to indicate
 the progress of the function.}
+
+\item{nominatim_server}{The URL of the Nominatim server to use.
+Defaults to \code{"https://nominatim.openstreetmap.org/"}.}
 
 \item{custom_query}{A named list with API-specific parameters to be used
 (i.e. \code{list(countrycodes = "US")}). See \strong{Details}.}
@@ -42,13 +46,16 @@ points (\code{TRUE}, which is the default) or potentially other shapes as
 provided by the Nominatim API (\code{FALSE}). See \strong{About Geometry Types}.}
 }
 \value{
-A \CRANpkg{sf} object with the results.
+A \code{\link[sf:sf]{sf}} object with the results.
 }
 \description{
-This function allows you to geocode addresses and return the corresponding
+This function allows you to geocode addresses and returns the corresponding
 spatial object. This function returns the spatial object associated with the
-query using \CRANpkg{sf}, see \code{\link[=geo_lite_sf]{geo_lite_sf()}} for retrieving the data in
-\CRANpkg{tibble} format.
+query using \CRANpkg{sf}, see \code{\link[=geo_lite]{geo_lite()}} for retrieving the data in
+\code{\link[tibble:tibble]{tibble}} format.
+
+This function correspond to the \strong{free-form query} search described in the
+\href{https://nominatim.org/release-docs/develop/api/Search/}{API endpoint}.
 }
 \details{
 See \url{https://nominatim.org/release-docs/latest/api/Search/} for additional
@@ -97,27 +104,35 @@ if (any(!sf::st_is_empty(sol_poly))) {
 }
 # Several results
 
-Madrid <- geo_lite_sf("Madrid",
+madrid <- geo_lite_sf("Comunidad de Madrid, Spain",
   limit = 2,
   points_only = FALSE, full_results = TRUE
 )
 
-if (any(!sf::st_is_empty(Madrid))) {
-  ggplot(Madrid) +
+if (any(!sf::st_is_empty(madrid))) {
+  ggplot(madrid) +
     geom_sf(fill = NA)
 }
 }
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Geocoding strings: 
+\code{\link[=geo_lite]{geo_lite()}}.
+
+Geocoding: 
 \code{\link{geo_address_lookup}()},
 \code{\link{geo_address_lookup_sf}()},
-\code{\link{geo_lite}()}
+\code{\link{geo_amenity}()},
+\code{\link{geo_amenity_sf}()},
+\code{\link{geo_lite}()},
+\code{\link{geo_lite_struct}()},
+\code{\link{geo_lite_struct_sf}()}
 
-Get \CRANpkg{sf} objects: 
+Get \code{\link[sf:sf]{sf}} objects: 
 \code{\link{bbox_to_poly}()},
 \code{\link{geo_address_lookup_sf}()},
+\code{\link{geo_amenity_sf}()},
+\code{\link{geo_lite_struct_sf}()},
 \code{\link{reverse_geo_lite_sf}()}
 }
 \concept{geocoding}

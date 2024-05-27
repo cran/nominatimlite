@@ -2,7 +2,7 @@
 % Please edit documentation in R/geo_lite.R
 \name{geo_lite}
 \alias{geo_lite}
-\title{Address search API for OSM elements}
+\title{Address search API for OSM elements (free-form query)}
 \usage{
 geo_lite(
   address,
@@ -12,29 +12,33 @@ geo_lite(
   full_results = FALSE,
   return_addresses = TRUE,
   verbose = FALSE,
+  nominatim_server = "https://nominatim.openstreetmap.org/",
   progressbar = TRUE,
   custom_query = list()
 )
 }
 \arguments{
-\item{address}{character with single line address, e.g.
+\item{address}{\code{character} with single line address, e.g.
 (\code{"1600 Pennsylvania Ave NW, Washington"}) or a vector of addresses
 (\code{c("Madrid", "Barcelona")}).}
 
-\item{lat}{latitude column name in the output data (default  \code{"lat"}).}
+\item{lat}{Latitude column name in the output data (default  \code{"lat"}).}
 
-\item{long}{longitude column name in the output data (default  \code{"long"}).}
+\item{long}{Longitude column name in the output data (default  \code{"long"}).}
 
-\item{limit}{maximum number of results to return per input address. Note
+\item{limit}{Maximum number of results to return per input address. Note
 that each query returns a maximum of 50 results.}
 
-\item{full_results}{returns all available data from the API service.
+\item{full_results}{Returns all available data from the API service.
 If \code{FALSE} (default) only latitude, longitude and address columns are
 returned. See also \code{return_addresses}.}
 
-\item{return_addresses}{return input addresses with results if \code{TRUE}.}
+\item{return_addresses}{Return input addresses with results if \code{TRUE}.}
 
-\item{verbose}{if \code{TRUE} then detailed logs are output to the console.}
+\item{verbose}{If \code{TRUE} then detailed logs are output to the console.}
+
+\item{nominatim_server}{The URL of the Nominatim server to use.
+Defaults to \code{"https://nominatim.openstreetmap.org/"}.}
 
 \item{progressbar}{Logical. If \code{TRUE} displays a progress bar to indicate
 the progress of the function.}
@@ -43,12 +47,15 @@ the progress of the function.}
 (i.e. \code{list(countrycodes = "US")}). See \strong{Details}.}
 }
 \value{
-A \CRANpkg{tibble} with the results.
+A \code{\link[tibble:tibble]{tibble}} with the results found by the query.
 }
 \description{
 Geocodes addresses given as character values. This function returns the
-\CRANpkg{tibble} associated with the query, see \code{\link[=geo_lite_sf]{geo_lite_sf()}} for
-retrieving the data as a spatial object (\CRANpkg{sf} format).
+\code{\link[tibble:tibble]{tibble}} associated with the query, see \code{\link[=geo_lite_sf]{geo_lite_sf()}} for
+retrieving the data as a spatial object (\code{\link[sf:sf]{sf}} format).
+
+This function correspond to the \strong{free-form query} search described in the
+\href{https://nominatim.org/release-docs/develop/api/Search/}{API endpoint}.
 }
 \details{
 See \url{https://nominatim.org/release-docs/latest/api/Search/} for additional
@@ -71,11 +78,15 @@ geo_lite(c("Madrid", "Barcelona"),
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=geo_lite_sf]{geo_lite_sf()}}, \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}
+\code{\link[=geo_lite_sf]{geo_lite_sf()}}, \code{\link[tidygeocoder:geo]{tidygeocoder::geo()}}.
 
-Geocoding strings: 
+Geocoding: 
 \code{\link{geo_address_lookup}()},
 \code{\link{geo_address_lookup_sf}()},
-\code{\link{geo_lite_sf}()}
+\code{\link{geo_amenity}()},
+\code{\link{geo_amenity_sf}()},
+\code{\link{geo_lite_sf}()},
+\code{\link{geo_lite_struct}()},
+\code{\link{geo_lite_struct_sf}()}
 }
 \concept{geocoding}

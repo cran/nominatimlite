@@ -3,9 +3,14 @@
 #' @description
 #'
 #' Generates an address from a latitude and longitude. Latitudes must be
-#' between `[-90, 90]` and longitudes between `[-180, 180]`. This function
-#' returns the spatial object associated with the query using \CRANpkg{sf}, see
-#' [reverse_geo_lite()] for retrieving the data in \CRANpkg{tibble} format.
+#' between \eqn{\left[-90, 90 \right]} and longitudes between
+#' \eqn{\left[-180, 180 \right]}. This function returns the spatial object
+#' associated with the query using \CRANpkg{sf}, see [reverse_geo_lite()] for
+#' retrieving the data in [`tibble`][tibble::tibble] format.
+#'
+#' @family reverse
+#' @family spatial
+#'
 #'
 #' @inheritParams reverse_geo_lite
 #' @inheritParams geo_lite_sf
@@ -17,7 +22,15 @@
 #' @inheritSection  reverse_geo_lite  About Zooming
 #' @inheritSection  geo_lite_sf  About Geometry Types
 #'
-#' @return A \CRANpkg{sf} object with the results.
+#' @return
+#'
+#' ```{r child = "man/chunks/sfout.Rmd"}
+#' ```
+#'
+#' @export
+#'
+#' @seealso
+#' [reverse_geo_lite()].
 #'
 #' @examplesIf nominatim_check_access()
 #' \donttest{
@@ -57,17 +70,14 @@
 #'     geom_sf()
 #' }
 #' }
-#' @export
-#'
-#' @seealso [reverse_geo_lite()]
-#' @family reverse
-#' @family spatial
 reverse_geo_lite_sf <- function(lat,
                                 long,
                                 address = "address",
                                 full_results = FALSE,
                                 return_coords = TRUE,
                                 verbose = FALSE,
+                                nominatim_server =
+                                  "https://nominatim.openstreetmap.org/",
                                 progressbar = TRUE,
                                 custom_query = list(),
                                 points_only = TRUE) {
@@ -119,15 +129,17 @@ reverse_geo_lite_sf <- function(lat,
       setTxtProgressBar(pb, x)
     }
     rw <- key[x, ]
+
     res_single <- reverse_geo_lite_sf_single(
-      as.double(rw$lat_cap_int),
-      as.double(rw$long_cap_int),
-      address,
-      full_results,
-      return_coords,
-      verbose,
-      custom_query,
-      points_only
+      lat_cap = as.double(rw$lat_cap_int),
+      long_cap = as.double(rw$long_cap_int),
+      address = address,
+      full_results = full_results,
+      return_coords = return_coords,
+      verbose = verbose,
+      custom_query = custom_query,
+      points_only = points_only,
+      nominatim_server = nominatim_server
     )
 
     res_single <- dplyr::bind_cols(res_single, rw[, c(1, 2)])
@@ -172,10 +184,13 @@ reverse_geo_lite_sf_single <- function(lat_cap,
                                        full_results = TRUE,
                                        return_coords = TRUE,
                                        verbose = TRUE,
+                                       nominatim_server =
+                                         "https://nominatim.openstreetmap.org/",
                                        custom_query = list(),
                                        points_only = FALSE) {
-  # Step 1: Download ----
-  api <- "https://nominatim.openstreetmap.org/reverse?"
+  # First build the api address. If the passed nominatim_server does not end
+  # with a trailing forward-slash, add one
+  api <- prepare_api_url(nominatim_server, "reverse?")
 
   # Compose url
   url <- paste0(api, "lat=", lat_cap, "&lon=", long_cap, "&format=geojson")
@@ -198,13 +213,11 @@ reverse_geo_lite_sf_single <- function(lat_cap,
   # Step 2: Read and parse results ----
   tbl_query <- dplyr::tibble(lat = lat_cap, lon = long_cap)
 
-  # nocov start
   if (isFALSE(res)) {
     message(url, " not reachable.")
     out <- empty_sf(empty_tbl_rev(tbl_query, address))
     return(invisible(out))
   }
-  # nocov end
 
 
   # Empty query

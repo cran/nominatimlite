@@ -4,9 +4,12 @@
 #' The lookup API allows to query the address and other details of one or
 #' multiple OSM objects like node, way or relation. This function returns the
 #' spatial object associated with the query using \CRANpkg{sf}, see
-#' [geo_address_lookup()] for retrieving the data in \CRANpkg{tibble} format.
+#' [geo_address_lookup()] for retrieving the data in [`tibble`][tibble::tibble]
+#' format.
 #'
-#' @return A \CRANpkg{sf} object with the results.
+#' @family lookup
+#' @family geocoding
+#' @family spatial
 #'
 #' @inheritParams geo_lite_sf
 #' @inheritParams geo_address_lookup
@@ -17,10 +20,15 @@
 #'
 #' @inheritSection  geo_lite_sf  About Geometry Types
 #'
-#' @seealso [geo_address_lookup()]
-#' @family lookup
-#' @family geocoding
-#' @family spatial
+#' @return
+#'
+#' ```{r child = "man/chunks/sfout.Rmd"}
+#' ```
+#'
+#' @seealso
+#' [geo_address_lookup()].
+#'
+#' @export
 #'
 #' @examplesIf nominatim_check_access()
 #' \donttest{
@@ -52,16 +60,18 @@
 #' several <- geo_address_lookup_sf(c(146656, 240109189), type = c("R", "N"))
 #' several
 #' }
-#' @export
 geo_address_lookup_sf <- function(osm_ids,
                                   type = c("N", "W", "R"),
                                   full_results = FALSE,
                                   return_addresses = TRUE,
                                   verbose = FALSE,
+                                  nominatim_server =
+                                    "https://nominatim.openstreetmap.org/",
                                   custom_query = list(),
                                   points_only = TRUE) {
-  # Step 1: Download ----
-  api <- "https://nominatim.openstreetmap.org/lookup?"
+  # First build the api address. If the passed nominatim_server does not end
+  # with a trailing forward-slash, add one
+  api <- prepare_api_url(nominatim_server, "lookup?")
 
   # Prepare nodes
   osm_ids <- as.integer(osm_ids)
@@ -87,14 +97,12 @@ geo_address_lookup_sf <- function(osm_ids,
   # Keep a tbl with the query
   tbl_query <- dplyr::tibble(query = paste0(type, osm_ids))
 
-  # nocov start
   # If no response...
   if (isFALSE(res)) {
     message(url, " not reachable.")
     out <- empty_sf(tbl_query)
     return(invisible(out))
   }
-  # nocov end
 
   # Read
   sfobj <- sf::read_sf(json, stringsAsFactors = FALSE)
