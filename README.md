@@ -14,12 +14,11 @@ results](https://badges.cranchecks.info/worst/nominatimlite.svg)](https://cran.r
 [![R-CMD-check](https://github.com/dieghernan/nominatimlite/actions/workflows/check-full.yaml/badge.svg)](https://github.com/dieghernan/nominatimlite/actions/workflows/check-full.yaml)
 [![R-hub](https://github.com/dieghernan/nominatimlite/actions/workflows/rhub.yaml/badge.svg)](https://github.com/dieghernan/nominatimlite/actions/workflows/rhub.yaml)
 [![codecov](https://codecov.io/gh/dieghernan/nominatimlite/branch/main/graph/badge.svg?token=jSZ4RIsj91)](https://app.codecov.io/gh/dieghernan/nominatimlite)
-[![r-universe](https://dieghernan.r-universe.dev/badges/nominatimlite)](https://dieghernan.r-universe.dev/nominatimlite)
 [![CodeFactor](https://www.codefactor.io/repository/github/dieghernan/nominatimlite/badge)](https://www.codefactor.io/repository/github/dieghernan/nominatimlite)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.5113195-blue)](https://doi.org/10.5281/zenodo.5113195)
+[![DOI](https://img.shields.io/badge/DOI-10.32614/CRAN.package.nominatimlite-blue)](https://doi.org/10.32614/CRAN.package.nominatimlite)
 [![status](https://tinyverse.netlify.app/status/nominatimlite)](https://CRAN.R-project.org/package=nominatimlite)
 
 <!-- badges: end -->
@@ -79,7 +78,7 @@ remotes::install_github("dieghernan/nominatimlite")
 ```
 
 Alternatively, you can install **nominatimlite** using the
-[r-universe](https://dieghernan.r-universe.dev/nominatimlite):
+**r-universe**:
 
 ``` r
 # Install nominatimlite in R:
@@ -116,7 +115,7 @@ ggplot(CA) +
   geom_sf(data = pizzahut, col = "red")
 ```
 
-<img src="man/figures/README-pizzahut-1.png" width="100%" />
+<img src="man/figures/README-pizzahut-1.png" alt="Locations of Pizza Hut restaurants in California extracted with nominatimlite" width="100%" />
 
 You can also extract polygon and line objects (as provided by the
 Nominatim API) using the option `points_only = FALSE`:
@@ -128,7 +127,7 @@ ggplot(sol_poly) +
   geom_sf()
 ```
 
-<img src="man/figures/README-statue_liberty-1.png" width="100%" />
+<img src="man/figures/README-statue_liberty-1.png" alt="Location of Statue of Liberty extracted with nominatimlite" width="100%" />
 
 ``` r
 dayton <- geo_lite_sf("Dayton, OH") # default - a point
@@ -141,7 +140,7 @@ ggplot() +
   geom_sf(data = ohio_river, color = "blue")
 ```
 
-<img src="man/figures/README-line-object-1.png" width="100%" />
+<img src="man/figures/README-line-object-1.png" alt="Different features named Ohio extracted with nominatimlite" width="100%" />
 
 ### Geocoding and reverse geocoding
 
@@ -206,7 +205,7 @@ the parameters available.
 <p>
 Hernangómez D (2024). <em>nominatimlite: Interface with Nominatim API
 Service</em>.
-<a href="https://doi.org/10.5281/zenodo.5113195">doi:10.5281/zenodo.5113195</a>,
+<a href="https://doi.org/10.32614/CRAN.package.nominatimlite">doi:10.32614/CRAN.package.nominatimlite</a>,
 <a href="https://dieghernan.github.io/nominatimlite/">https://dieghernan.github.io/nominatimlite/</a>.
 </p>
 
@@ -214,10 +213,10 @@ A BibTeX entry for LaTeX users is
 
     @Manual{R-nominatimlite,
       title = {{nominatimlite}: Interface with {Nominatim} {API} Service},
+      doi = {10.32614/CRAN.package.nominatimlite},
       author = {Diego Hernangómez},
       year = {2024},
-      version = {0.4.0},
-      doi = {10.5281/zenodo.5113195},
+      version = {0.4.1},
       url = {https://dieghernan.github.io/nominatimlite/},
       abstract = {Lite interface for getting data from OSM service Nominatim <https://nominatim.org/release-docs/latest/>. Extract coordinates from addresses, find places near a set of coordinates and return spatial objects on sf format.},
     }

@@ -1,4 +1,4 @@
-#' Address lookup API for OSM elements in \CRANpkg{sf} format
+#' Address lookup API in \CRANpkg{sf} format
 #'
 #' @description
 #' The lookup API allows to query the address and other details of one or
@@ -74,7 +74,8 @@ geo_address_lookup_sf <- function(osm_ids,
   api <- prepare_api_url(nominatim_server, "lookup?")
 
   # Prepare nodes
-  osm_ids <- as.integer(osm_ids)
+  osm_ids <- as.numeric(osm_ids)
+  osm_ids <- floor(abs(osm_ids))
   type <- as.character(type)
   nodes <- paste0(type, osm_ids, collapse = ",")
 
