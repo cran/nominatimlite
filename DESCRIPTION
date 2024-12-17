@@ -1,7 +1,7 @@
 Type: Package
 Package: nominatimlite
 Title: Interface with 'Nominatim' API Service
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: c(
     person("Diego", "Hernangómez", , "diego.hernangomezherrero@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-8457-4658")),
@@ -36,9 +36,9 @@ RoxygenNote: 7.3.2
 X-schema.org-applicationCategory: cartography
 X-schema.org-keywords: r, geocoding, openstreetmap, address, nominatim,
         reverse-geocoding, rstats, shapefile, r-package, spatial, cran,
-        api-wrapper
+        api-wrapper, api, gis
 NeedsCompilation: no
-Packaged: 2024-07-19 10:28:25 UTC; diego
+Packaged: 2024-12-17 13:39:54 UTC; diego
 Author: Diego Hernangómez [aut, cre, cph]
     (<https://orcid.org/0000-0001-8457-4658>),
   Jindra Lacko [ctb, rev] (<https://orcid.org/0000-0002-0375-5156>),
@@ -46,4 +46,4 @@ Author: Diego Hernangómez [aut, cre, cph]
   OpenStreetMap [cph] (For the data)
 Maintainer: Diego Hernangómez <diego.hernangomezherrero@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-07-19 10:40:03 UTC
+Date/Publication: 2024-12-17 13:50:02 UTC

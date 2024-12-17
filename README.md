@@ -15,6 +15,7 @@ results](https://badges.cranchecks.info/worst/nominatimlite.svg)](https://cran.r
 [![R-hub](https://github.com/dieghernan/nominatimlite/actions/workflows/rhub.yaml/badge.svg)](https://github.com/dieghernan/nominatimlite/actions/workflows/rhub.yaml)
 [![codecov](https://codecov.io/gh/dieghernan/nominatimlite/branch/main/graph/badge.svg?token=jSZ4RIsj91)](https://app.codecov.io/gh/dieghernan/nominatimlite)
 [![CodeFactor](https://www.codefactor.io/repository/github/dieghernan/nominatimlite/badge)](https://www.codefactor.io/repository/github/dieghernan/nominatimlite)
+[![r-universe](https://dieghernan.r-universe.dev/badges/nominatimlite)](https://dieghernan.r-universe.dev/nominatimlite)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -78,7 +79,7 @@ remotes::install_github("dieghernan/nominatimlite")
 ```
 
 Alternatively, you can install **nominatimlite** using the
-**r-universe**:
+[r-universe](https://dieghernan.r-universe.dev/nominatimlite):
 
 ``` r
 # Install nominatimlite in R:
@@ -169,11 +170,11 @@ Only latitude and longitude are returned from the geocoder service in
 this example, but `full_results = TRUE` can be used to return all of the
 data from the geocoder service.
 
-| query                                      | latitude |  longitude | address                                                                                                           |
-|:-------------------------------------------|---------:|-----------:|:------------------------------------------------------------------------------------------------------------------|
-| 1600 Pennsylvania Ave NW, Washington, DC   | 38.89770 |  -77.03655 | White House, 1600, Pennsylvania Avenue Northwest, Ward 2, Washington, District of Columbia, 20500, United States  |
-| 600 Montgomery St, San Francisco, CA 94111 | 37.79520 | -122.40279 | Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, California, 94111, United States |
-| 233 S Wacker Dr, Chicago, IL 60606         | 41.87874 |  -87.63596 | Willis Tower, 233, South Wacker Drive, Printer’s Row, Loop, Chicago, Cook County, Illinois, 60606, United States  |
+| query | latitude | longitude | address |
+|:---|---:|---:|:---|
+| 1600 Pennsylvania Ave NW, Washington, DC | 38.89770 | -77.03655 | White House, 1600, Pennsylvania Avenue Northwest, Ward 2, Washington, District of Columbia, 20500, United States |
+| 600 Montgomery St, San Francisco, CA 94111 | 37.79519 | -122.40279 | Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, California, 94111, United States |
+| 233 S Wacker Dr, Chicago, IL 60606 | 41.87874 | -87.63596 | Willis Tower, 233, South Wacker Drive, Printer’s Row, Loop, Chicago, Cook County, Illinois, 60606, United States |
 
 To perform reverse geocoding (obtaining addresses from geographic
 coordinates), we can use the `reverse_geo_lite()` function. The
@@ -190,11 +191,11 @@ reverse <- reverse_geo_lite(
 #>   |                                                          |                                                  |   0%  |                                                          |=================                                 |  33%  |                                                          |=================================                 |  67%  |                                                          |==================================================| 100%
 ```
 
-| address_found                                                                                                                       |      lat |        lon |
-|:------------------------------------------------------------------------------------------------------------------------------------|---------:|-----------:|
-| Zastava Sjedinjenih Američkih Država, Pennsylvania Avenue Northwest, Ward 2, Washington, District of Columbia, 20006, United States | 38.89772 |  -77.03655 |
-| Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, California, 94111, United States                   | 37.79520 | -122.40279 |
-| Willis Tower, 233, South Wacker Drive, Printer’s Row, Loop, Chicago, Cook County, Illinois, 60606, United States                    | 41.87874 |  -87.63596 |
+| address_found | lat | lon |
+|:---|---:|---:|
+| White House, 1600, Pennsylvania Avenue Northwest, Ward 2, Washington, District of Columbia, 20500, United States | 38.89770 | -77.03655 |
+| Transamerica Pyramid, 600, Montgomery Street, Financial District, San Francisco, California, 94111, United States | 37.79519 | -122.40279 |
+| Willis Tower, 233, South Wacker Drive, Printer’s Row, Loop, Chicago, Cook County, Illinois, 60606, United States | 41.87874 | -87.63596 |
 
 For more advance users, see [Nominatim
 docs](https://nominatim.org/release-docs/latest/api/Search/) to check
@@ -216,7 +217,7 @@ A BibTeX entry for LaTeX users is
       doi = {10.32614/CRAN.package.nominatimlite},
       author = {Diego Hernangómez},
       year = {2024},
-      version = {0.4.1},
+      version = {0.4.2},
       url = {https://dieghernan.github.io/nominatimlite/},
       abstract = {Lite interface for getting data from OSM service Nominatim <https://nominatim.org/release-docs/latest/>. Extract coordinates from addresses, find places near a set of coordinates and return spatial objects on sf format.},
     }
