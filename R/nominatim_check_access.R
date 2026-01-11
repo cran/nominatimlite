@@ -22,7 +22,8 @@
 #' nominatim_check_access()
 #' }
 nominatim_check_access <- function(
-    nominatim_server = "https://nominatim.openstreetmap.org/") {
+  nominatim_server = "https://nominatim.openstreetmap.org/"
+) {
   # First build the api address. If the passed nominatim_server does not end
   # with a trailing forward-slash, add one
   url <- prepare_api_url(nominatim_server, "status?format=json")
@@ -38,9 +39,9 @@ nominatim_check_access <- function(
 
   # nocov start
   if (result$status == 0 || result$message == "OK") {
-    return(TRUE)
+    TRUE
   } else {
-    return(FALSE)
+    FALSE
   }
   # nocov end
 }
@@ -77,6 +78,8 @@ skip_if_api_server <- function() {
 #'
 #' @keywords internal
 #'
+#' @noRd
+#'
 api_call <- function(url, destfile = tempfile(fileext = ".json"), quiet) {
   dwn_res <- suppressWarnings(
     try(
@@ -90,7 +93,9 @@ api_call <- function(url, destfile = tempfile(fileext = ".json"), quiet) {
   if (!inherits(dwn_res, "try-error")) {
     return(TRUE)
   }
-  if (isFALSE(quiet)) message("Retrying query")
+  if (isFALSE(quiet)) {
+    message("Retrying query")
+  }
   Sys.sleep(1)
 
   dwn_res <- suppressWarnings(

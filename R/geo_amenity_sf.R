@@ -56,11 +56,18 @@
 #' }
 #' }
 geo_amenity_sf <- function(
-    bbox, amenity, limit = 1, full_results = FALSE,
-    return_addresses = TRUE, verbose = FALSE,
-    nominatim_server = "https://nominatim.openstreetmap.org/",
-    progressbar = TRUE, custom_query = list(), strict = FALSE,
-    points_only = TRUE) {
+  bbox,
+  amenity,
+  limit = 1,
+  full_results = FALSE,
+  return_addresses = TRUE,
+  verbose = FALSE,
+  nominatim_server = "https://nominatim.openstreetmap.org/",
+  progressbar = TRUE,
+  custom_query = list(),
+  strict = FALSE,
+  points_only = TRUE
+) {
   if (limit > 50) {
     message(paste(
       "Nominatim provides 50 results as a maximum. ",
@@ -102,13 +109,19 @@ geo_amenity_sf <- function(
     }
 
     geo_lite_struct_sf(
-      amenity = ad, limit = limit, full_results = full_results,
-      return_addresses = return_addresses, verbose = verbose,
+      amenity = ad,
+      limit = limit,
+      full_results = full_results,
+      return_addresses = return_addresses,
+      verbose = verbose,
       nominatim_server = nominatim_server,
-      custom_query = custom_query, points_only = points_only
+      custom_query = custom_query,
+      points_only = points_only
     )
   })
-  if (progressbar) close(pb)
+  if (progressbar) {
+    close(pb)
+  }
 
   all_res <- dplyr::bind_rows(all_res)
 
@@ -125,6 +138,5 @@ geo_amenity_sf <- function(
     all_res <- all_res[int, ]
   }
 
-
-  return(all_res)
+  all_res
 }

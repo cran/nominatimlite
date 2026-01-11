@@ -36,8 +36,12 @@ is_named <- function(x) {
 }
 
 
-keep_names <- function(x, return_addresses, full_results,
-                       colstokeep = "query") {
+keep_names <- function(
+  x,
+  return_addresses,
+  full_results,
+  colstokeep = "query"
+) {
   x$address <- x$display_name
   if ("boundingbox" %in% names(x)) {
     bbun <- lapply(x$boundingbox, function(y) {
@@ -51,35 +55,48 @@ keep_names <- function(x, return_addresses, full_results,
   }
 
   out_cols <- colstokeep
-  if (return_addresses) out_cols <- c(out_cols, "address")
-  if (full_results) out_cols <- c(out_cols, "address", names(x))
+  if (return_addresses) {
+    out_cols <- c(out_cols, "address")
+  }
+  if (full_results) {
+    out_cols <- c(out_cols, "address", names(x))
+  }
 
   out_cols <- unique(out_cols)
   out <- x[, out_cols]
 
-  return(out)
+  out
 }
 
-keep_names_rev <- function(x, address = "address", return_coords = FALSE,
-                           full_results = FALSE,
-                           colstokeep = address) {
+keep_names_rev <- function(
+  x,
+  address = "address",
+  return_coords = FALSE,
+  full_results = FALSE,
+  colstokeep = address
+) {
   x$xxxyyyzzz <- x$display_name
   nm <- names(x)
   nm <- gsub("xxxyyyzzz", address, nm, fixed = TRUE)
   names(x) <- nm
   out_cols <- colstokeep
-  if (return_coords) out_cols <- c(out_cols, "lat", "lon")
-  if (full_results) out_cols <- c(out_cols, "lat", "lon", names(x))
+  if (return_coords) {
+    out_cols <- c(out_cols, "lat", "lon")
+  }
+  if (full_results) {
+    out_cols <- c(out_cols, "lat", "lon", names(x))
+  }
 
   out_cols <- unique(out_cols)
   out <- x[, out_cols]
 
-  return(out)
+  out
 }
 
 prepare_api_url <- function(
-    nominatim_server = "https://nominatim.openstreetmap.org/",
-    entry) {
+  nominatim_server = "https://nominatim.openstreetmap.org/",
+  entry
+) {
   api <- paste0(gsub("/$", "", nominatim_server), "/", entry)
   api
 }
@@ -115,23 +132,27 @@ unnest_reverse <- function(x) {
   # Unnest fields
 
   lngths <- vapply(x, length, FUN.VALUE = numeric(1))
+
+  # Remove null fields
+  x <- x[lngths > 0]
+
   endobj <- dplyr::as_tibble(x[lngths == 1])
 
   # OSM address
-  if ("address" %in% names(lngths)) {
+  if ("address" %in% names(x)) {
     ad <- dplyr::as_tibble(x$address)[1, ]
     names(ad) <- paste0("address.", names(ad))
 
     endobj <- dplyr::bind_cols(endobj, ad)
   }
 
-  if ("extratags" %in% names(lngths)) {
+  if ("extratags" %in% names(x)) {
     xtra <- dplyr::as_tibble(x$extratags)[1, ]
     names(xtra) <- paste0("extratags.", names(xtra))
     endobj <- dplyr::bind_cols(endobj, xtra)
   }
 
-  if ("boundingbox" %in% names(lngths)) {
+  if ("boundingbox" %in% names(x)) {
     bb <- dplyr::tibble(boundingbox = list(as.double(x$boundingbox)))
     endobj <- dplyr::bind_cols(endobj, bb)
   }
@@ -203,7 +224,6 @@ unnest_sf <- function(x) {
     x <- x[, setdiff(names(x), "extratags.xxx_empty_remove")]
   }
 
-
   x <- sf_to_tbl(x)
 
   x
@@ -231,6 +251,17 @@ unnest_sf <- function(x) {
 
 
 unnest_sf_reverse <- function(x) {
+  # Remove null fields
+  nulls_or_nas <- vapply(
+    x,
+    function(a_col) {
+      any(is.null(a_col), is.na(a_col))
+    },
+    FUN.VALUE = logical(1)
+  )
+
+  x <- x[!nulls_or_nas]
+
   # Unnest
   if ("address" %in% names(x)) {
     # Need to unnest
@@ -264,7 +295,6 @@ unnest_sf_reverse <- function(x) {
     newsfobj <- x[, setdiff(names(x), "extratags")]
     x <- dplyr::bind_cols(newsfobj, newxtra)
   }
-
 
   x <- sf_to_tbl(x)
 
